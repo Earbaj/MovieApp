@@ -1,0 +1,39 @@
+package com.example.movieapp.overview
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.example.movieapp.R
+import com.example.movieapp.adapter.PhotoGridAdapter
+import com.example.movieapp.databinding.FragmentOverviewBinding
+
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [OverviewFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class OverviewFragment : Fragment() {
+
+    private val viewModel: OverViewViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val bindings = FragmentOverviewBinding.inflate(inflater)
+        bindings.lifecycleOwner = this
+        bindings.viewModel = viewModel
+        bindings.photosGrid.adapter = PhotoGridAdapter()
+        return bindings.root
+    }
+
+}
