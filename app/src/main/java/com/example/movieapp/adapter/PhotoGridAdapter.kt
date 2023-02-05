@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.data.Result
 import com.example.movieapp.databinding.GridViewItemBinding
 
-class PhotoGridAdapter : ListAdapter<Result,
+class PhotoGridAdapter(val onClickListener: OnClickListener) : ListAdapter<Result,
         PhotoGridAdapter.MoviePhotoViewHolder>(DiffCallback) {
 
 
@@ -36,8 +36,17 @@ class PhotoGridAdapter : ListAdapter<Result,
 
     override fun onBindViewHolder(holder: PhotoGridAdapter.MoviePhotoViewHolder, position: Int) {
         val moviePhoto = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(moviePhoto)
+        }
         holder.bind(moviePhoto)
     }
 
+//    class OnClickListener(val clickListener: (movieProperty:Result) -> Unit) {
+//        fun onClick(movieProperty:Result) = clickListener(movieProperty)
+//    }
+    class OnClickListener(val clickListener: (movieProparty: Result)->Unit){
+        fun onClick(movieProparty: Result) = clickListener(movieProparty)
+    }
 
 }

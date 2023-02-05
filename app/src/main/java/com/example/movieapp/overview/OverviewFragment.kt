@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.movieapp.R
 import com.example.movieapp.adapter.PhotoGridAdapter
 import com.example.movieapp.databinding.FragmentOverviewBinding
@@ -18,7 +19,9 @@ import com.example.movieapp.databinding.FragmentOverviewBinding
  */
 class OverviewFragment : Fragment() {
 
-    private val viewModel: OverViewViewModel by viewModels()
+    private val viewModel: OverViewViewModel by lazy {
+        ViewModelProvider(this).get(OverViewViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,11 @@ class OverviewFragment : Fragment() {
         val bindings = FragmentOverviewBinding.inflate(inflater)
         bindings.lifecycleOwner = this
         bindings.viewModel = viewModel
-        bindings.photosGrid.adapter = PhotoGridAdapter()
+        bindings.photosGrid.adapter = PhotoGridAdapter(
+            PhotoGridAdapter.OnClickListener(){
+                viewModel.displayPropertyDetails(it)
+            }
+        )
         return bindings.root
     }
 

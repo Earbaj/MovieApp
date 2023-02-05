@@ -12,10 +12,12 @@ class OverViewViewModel : ViewModel(){
     // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<String>()
     private val _obj = MutableLiveData<List<Result>>()
+    private val _navigateToSelectedProperty = MutableLiveData<Result?>()
 
     // The external immutable LiveData for the request status
-    val status: LiveData<String> = _status
-    val obj: LiveData<List<Result>> = _obj
+    var status: LiveData<String> = _status
+    var obj: LiveData<List<Result>> = _obj
+    var navigateToSelectedProperty: LiveData<Result?> = _navigateToSelectedProperty
 
     init {
         getMarsePhotos()
@@ -25,12 +27,27 @@ class OverViewViewModel : ViewModel(){
         viewModelScope.launch {
             try{
                 val listRes = MarsApi.retrofitService.getPhotos()
-                _status.value = "${"https://image.tmdb.org/t/p/w500"+listRes.results[1].backdropPath}"
+                //_status.value = "${"https://image.tmdb.org/t/p/w500"+listRes.results[1].backdropPath}"
                 _obj.value = listRes.results
             }catch (ex: Exception){
                 println(ex.toString())
             }
         }
+    }
+
+    /**
+     * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
+     * @param marsProperty The [MarsProperty] that was clicked on.
+     */
+    fun displayPropertyDetails(marsProperty: Result) {
+        _navigateToSelectedProperty.value = marsProperty
+    }
+
+    /**
+     * After the navigation has taken place, make sure navigateToSelectedProperty is set to null
+     */
+    fun displayPropertyDetailsComplete() {
+        _navigateToSelectedProperty.value = null
     }
 
 

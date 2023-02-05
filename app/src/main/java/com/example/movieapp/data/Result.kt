@@ -1,7 +1,11 @@
 package com.example.movieapp.data
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
+
+@Parcelize
 data class Result(
     val adult: Boolean,
 
@@ -36,4 +40,5 @@ data class Result(
 
     @Json(name = "vote_count")
     val voteCount: Long
-)
+):Parcelable
+
