@@ -23,12 +23,9 @@ import com.example.movieapp.databinding.FragmentOverviewBinding
  */
 class OverviewFragment : Fragment() {
 
+    //Lazily initialize our OverviewViewModel
     private val viewModel: OverViewViewModel by lazy {
         ViewModelProvider(this).get(OverViewViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -37,13 +34,21 @@ class OverviewFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val bindings = FragmentOverviewBinding.inflate(inflater)
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         bindings.lifecycleOwner = this
+        // Giving the binding access to the OverviewViewModel
         bindings.viewModel = viewModel
+
+        // Sets the adapter of the photosGrid RecyclerView with clickHandler lambda that
+        // tells the viewModel when our property is clicked
         bindings.photosGrid.adapter = PhotoGridAdapter(
             PhotoGridAdapter.OnClickListener(){
                 viewModel.displayPropertyDetails(it)
             }
         )
+        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
+        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
+        // for another navigation event.
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if(it != null){
                 findNavController()
