@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.movieapp.R
 import com.example.movieapp.adapter.PhotoGridAdapter
 import com.example.movieapp.databinding.FragmentOverviewBinding
@@ -40,6 +44,13 @@ class OverviewFragment : Fragment() {
                 viewModel.displayPropertyDetails(it)
             }
         )
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                findNavController()
+                    .navigate(OverviewFragmentDirections.actionOverviewFragment2ToDetailsFragment(it))
+                viewModel.displayPropertyDetailsComplete()
+            }
+        })
         return bindings.root
     }
 

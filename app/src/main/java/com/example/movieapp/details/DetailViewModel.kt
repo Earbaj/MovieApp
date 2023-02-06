@@ -8,11 +8,15 @@ import com.example.movieapp.data.Result
 
 class DetailViewModel(movieProparty: Result, app: Application) : AndroidViewModel(app) {
 
-    private val _selectedObjects = MutableLiveData<Result>()
-    var selectedObjects: LiveData<Result> = _selectedObjects
+    private val _selectedProperty = MutableLiveData<Result>()
 
+    // The external LiveData for the SelectedProperty
+    val selectedProperty: LiveData<Result>
+        get() = _selectedProperty
+
+    // Initialize the _selectedProperty MutableLiveData
     init {
-        _selectedObjects.value = movieProparty
+        _selectedProperty.value = movieProparty
     }
 
 }

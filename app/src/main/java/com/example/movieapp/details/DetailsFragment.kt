@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.movieapp.R
+import androidx.lifecycle.ViewModelProvider
+import com.example.movieapp.databinding.FragmentDetailsBinding
 
 
 /**
@@ -25,6 +26,13 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_details, container, false)
+        val application = requireNotNull(activity).application
+        val bindings = FragmentDetailsBinding.inflate(inflater)
+        bindings.lifecycleOwner = this
+        val movieProperty = DetailsFragmentArgs.fromBundle(requireArguments()).movieProparty
+        val viewModelFactory = DetailViewModelFactory(movieProperty, application)
+        bindings.viewModel = ViewModelProvider(
+            this, viewModelFactory).get(DetailViewModel::class.java)
+        return bindings.root
     }
 }
